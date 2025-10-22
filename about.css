@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #0d0d0d;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+  }
+  
+  /* === About Section === */
+  .about-section {
+    padding: 80px 10%;
+    text-align: center;
+  }
+  
+  .about-intro h1 {
+    font-weight: 400;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .about-intro p {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 60px;
+  }
+  
+  /* === Team Section === */
+  .team-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    justify-content: center;
+  }
+  
+  .team-member {
+    background-color: #111;
+    border-radius: 12px;
+    padding: 25px 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .team-member:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+  }
+  
+  .team-member img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .team-member h3 {
+    font-weight: 400;
+    margin-bottom: 5px;
+  }
+  
+  .team-member p {
+    color: #1e90ff;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  
+  .team-member span {
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  /* === Learn More Button === */
+  .learn-more {
+    margin-top: 60px;
+  }
+  
+  .learn-more a {
+    text-decoration: none;
+    background-color: #1e90ff;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: background 0.3s;
+  }
+  
+  .learn-more a:hover {
+    background-color: #4da6ff;
+  }
+  
+  /* === Footer === */
+  .footer-bottom {
+    background: #000;
+    color: #bbb;
+    text-align: center;
+    padding: 18px 10px;
+    font-size: 0.95rem;
+    border-top: 1px solid #222;
+  }
+  
+  .footer-bottom span {
+    color: #1e90ff;
+    transition: color 0.3s;
+  }
+  
+  .footer-bottom span:hover {
+    color: #4da6ff;
+  }
+  

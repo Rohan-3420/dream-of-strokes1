@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | Dream of Strokes</title>
+  <link rel="stylesheet" href="about.css" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo/real/Untitled design (3).png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <p class="head">Welcome to Dream of Strokes!</p>
+      </header>
+    
+
+  <!-- Navbar (Copy from index.html) -->
+  <nav class="navbar">
+    <input type="checkbox" id="menu-toggle">
+    <label for="menu-toggle" class="menu-icon">&#9776;</label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="artwork.html">View Artwork</a></li>
+      <li><a href="about.html" class="active">About us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <img src="logo/real/dream.png" alt="Dream of Strokes Logo" class="logo">
+  </nav>
+
+  <!-- ===== ABOUT SECTION ===== -->
+  <section class="about-section">
+    <div class="about-intro">
+      <h1>Meet Our Artists</h1>
+      <p>We are a passionate group of artists bringing imagination to life through colors, textures, and emotions. Each painting tells a story — and every story begins with a stroke of passion.</p>
+    </div>
+
+    <div class="team-container">
+      <div class="team-member">
+        <img src="logo/Artist/SM (1).png" alt="Rohan Shahzad">
+        <h3>Rohan Shahzad</h3>
+        <p>Founder & Lead Artist</p>
+        <span>Specialized in still life and modern calligraphy. Every canvas reflects the soul of his imagination.</span>
+      </div>
+
+      <div class="team-member">
+        <img src="logo/Artist/112211.png" alt="Aisha Khan">
+        <h3>Aisha Khan</h3>
+        <p>Creative Director</p>
+        <span>Blending traditional techniques with digital art to create timeless expressions.</span>
+      </div>
+
+      <div class="team-member">
+        <img src="logo/Artist/WhatsApp Image 2025-10-14 at 10.14.18 AM.jpeg" alt="Ali Raza">
+        <h3>Ali Raza</h3>
+        <p>Scenery Artist</p>
+        <span>Capturing nature’s magic through calm tones and deep emotional storytelling.</span>
+      </div>
+
+      <div class="team-member">
+        <img src="logo/Artist/WhatsApp Image 2025-10-12 at 8.39.10 AM (1).jpeg" alt="Sara Malik">
+        <h3>Sara Malik</h3>
+        <p>Calligraphy Specialist</p>
+        <span>Combining elegance and flow, she transforms Arabic calligraphy into mesmerizing art.</span>
+      </div>
+    </div>
+
+    <div class="learn-more">
+      <a href="contact.html">Learn More</a>
+    </div>
+  </section>
+
+
+  <section class="info-section">
+    <div class="info-container">
+  
+      <!-- Categories Column -->
+      <div class="info-column">
+        <h3 class="info-heading">Categories</h3>
+        <ul class="info-list">
+          <li><a href="artwork.html">Still Life</a></li>
+          <li><a href="artwork.html">Calligraphy</a></li>
+          <li><a href="artwork.html">Scenery</a></li>
+        </ul>
+      </div>
+  
+      <!-- Follow Us Column -->
+      <div class="info-column">
+        <h3 class="info-heading">Follow Us</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+  
+      <!-- Contact Us Column -->
+      <div class="info-column">
+        <h3 class="info-heading">Contact Us</h3>
+        <p class="contact-text">
+          WhatsApp: <a href="https://wa.me/923354581567" target="_blank">+92 335 4581567</a><br><p class="qq">Rohan Shahzad</p>
+          WhatsApp: <a href="https://wa.me/923279784423" target="_blank">+92 327 9784423</a><br><p class="qq">Ahmad Abbas</p>
+          WhatsApp: <a href="https://wa.me/923158773306" target="_blank">+92 315 8773306</a><br><p class="qq">Fasih-ur-Rehman</p>
+          WhatsApp: <a href="https://wa.me/923217110997" target="_blank">+92 321 7110997</a><br><p class="qq">Talha Abuzar</p>
+        </p>
+      </div>
+  
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="footer-bottom">
+    <p>© 2025 Dream of Strokes | All Rights Reserved | Made by <span>Rohan Shahzad</span></p>
+  </footer>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchBtn = document.querySelector('.search-btn');
+      const searchBox = document.querySelector('.search-box');
+    
+      if (!searchBtn || !searchBox) return;
+    
+      if (!searchBtn.hasAttribute('type')) searchBtn.type = 'button';
+      const innerBtn = searchBox.querySelector('button');
+      if (innerBtn && !innerBtn.hasAttribute('type')) innerBtn.type = 'button';
+    
+      searchBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        searchBox.classList.toggle('active');
+        if (searchBox.classList.contains('active')) {
+          const input = searchBox.querySelector('input');
+          if (input) input.focus();
+        }
+      });
+    
+      document.addEventListener('click', (e) => {
+        if (!searchBox.contains(e.target) && !searchBtn.contains(e.target)) {
+          searchBox.classList.remove('active');
+        }
+      });
+    
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') searchBox.classList.remove('active');
+      });
+    });
+  
+  
+  
+    
+  document.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+  
+    if (window.innerWidth > 768) {
+      if (window.scrollY > 60) {
+        navbar.classList.add('shrink');
+      } else {
+        navbar.classList.remove('shrink');
+      }
+    }
+  });
+  
+  
+    </script>
+    
+</html>

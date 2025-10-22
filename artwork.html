@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Artwork | Dream of Strokes</title>
+  <link rel="icon" href="logo/real/Untitled design (3).png" type="image/png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Outfit:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="artwork.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+    <body>
+        <div class="header">
+          <header>
+    <p class="head">Welcome to Dream of Strokes!</p>
+  </header>
+
+          <!-- Paste the entire navbar here -->
+          <nav class="navbar">
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
+      
+            <ul class="nav-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="artwork.html" class="active">View Artwork</a></li>
+              <li><a href="about.html">About us</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+      
+            <img src="logo/real/dream.png" alt="image" class="logo">
+      
+            <div class="search-box">
+              <input type="text" placeholder="Search here...">
+              <button><i class="fa fa-search"></i></button>
+            </div>
+          </nav>
+        </div>
+      </body>
+      
+
+      
+  <header class="art-header">
+    <h1>Our Artwork Gallery</h1>
+    <p>Explore exclusive hand-painted pieces — each telling a story of passion and creativity.</p>
+  </header>
+
+  <section class="filter-section">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="still-life">Still Life</button>
+    <button class="filter-btn" data-filter="calligraphy">Calligraphy</button>
+    <button class="filter-btn" data-filter="scenery">Scenery</button>
+  </section>
+
+  <section class="art-grid">
+    <div class="art-card" data-category="still-life">
+      <img src="bg/dan-cook-KtQSnF8GNcc-unsplash.jpg" alt="Still Life Painting">
+      <div class="art-info">
+        <h3>The Apples</h3>
+        <p>Rs. 5,000 PKR</p>
+        <a href="painting1.html" class="view-btn">View Details</a>
+      </div>
+    </div>
+
+    <div class="art-card" data-category="calligraphy">
+      <img src="bg/steve-johnson-IDmD4iw9XvE-unsplash.jpg" alt="Arabic Calligraphy">
+      <div class="art-info">
+        <h3>Arabic Calligraphy</h3>
+        <p>Rs. 7,500 PKR</p>
+        <a href="painting2.html" class="view-btn">View Details</a>
+      </div>
+    </div>
+
+    <div class="art-card" data-category="scenery">
+      <img src="bg/anna-daudelin-BLq9ApXyFnk-unsplash.jpg" alt="Mountain Scenery">
+      <div class="art-info">
+        <h3>Mountain Scenery</h3>
+        <p>Rs. 9,000 PKR</p>
+        <a href="painting3.html" class="view-btn">View Details</a>
+      </div>
+    </div>
+
+    <div class="art-card" data-category="still-life">
+      <img src="logo/WhatsApp Image 2024-05-12 at 9.41.43 AM.jpeg" alt="Fruit Bowl">
+      <div class="art-info">
+        <h3>Fruit Bowl</h3>
+        <p>Rs. 6,500 PKR</p>
+        <a href="painting4.html" class="view-btn">View Details</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="info-container">
+  
+      <!-- Categories Column -->
+      <div class="info-column">
+        <h3 class="info-heading">Categories</h3>
+        <ul class="info-list">
+          <li><a href="artwork.html">Still Life</a></li>
+          <li><a href="artwork.html">Calligraphy</a></li>
+          <li><a href="artwork.html">Scenery</a></li>
+        </ul>
+      </div>
+  
+      <!-- Follow Us Column -->
+      <div class="info-column">
+        <h3 class="info-heading">Follow Us</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+  
+      <!-- Contact Us Column -->
+      <div class="info-column">
+        <h3 class="info-heading">Contact Us</h3>
+        <p class="contact-text">
+          WhatsApp: <a href="https://wa.me/923354581567" target="_blank">+92 335 4581567</a><br><p class="qq">Rohan Shahzad</p>
+          WhatsApp: <a href="https://wa.me/923279784423" target="_blank">+92 327 9784423</a><br><p class="qq">Ahmad Abbas</p>
+          WhatsApp: <a href="https://wa.me/923158773306" target="_blank">+92 315 8773306</a><br><p class="qq">Fasih-ur-Rehman</p>
+          WhatsApp: <a href="https://wa.me/923217110997" target="_blank">+92 321 7110997</a><br><p class="qq">Talha Abuzar</p>
+        </p>
+      </div>
+  
+    </div>
+  </section>
+
+  <footer class="footer-bottom">
+    <p>© 2025 Dream of Strokes | All Rights Reserved | Made by <span>Rohan Shahzad</span></p>
+  </footer>
+</body> 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchBtn = document.querySelector('.search-btn');
+      const searchBox = document.querySelector('.search-box');
+    
+      if (!searchBtn || !searchBox) return;
+    
+      if (!searchBtn.hasAttribute('type')) searchBtn.type = 'button';
+      const innerBtn = searchBox.querySelector('button');
+      if (innerBtn && !innerBtn.hasAttribute('type')) innerBtn.type = 'button';
+    
+      searchBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        searchBox.classList.toggle('active');
+        if (searchBox.classList.contains('active')) {
+          const input = searchBox.querySelector('input');
+          if (input) input.focus();
+        }
+      });
+    
+      document.addEventListener('click', (e) => {
+        if (!searchBox.contains(e.target) && !searchBtn.contains(e.target)) {
+          searchBox.classList.remove('active');
+        }
+      });
+    
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') searchBox.classList.remove('active');
+      });
+    });
+  
+  
+  
+    
+  document.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+  
+    if (window.innerWidth > 768) {
+      if (window.scrollY > 60) {
+        navbar.classList.add('shrink');
+      } else {
+        navbar.classList.remove('shrink');
+      }
+    }
+  });
+  
+  
+    </script>
+    
+
+
+<script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const artCards = document.querySelectorAll('.art-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+
+        artCards.forEach(card => {
+          card.style.display =
+            filter === 'all' || card.dataset.category === filter
+              ? 'block'
+              : 'none';
+        });
+      });
+    });
+
+
+  </script>
+
+<script>
+    const menuIcon = document.getElementById('menuIcon');
+    const navLinks = document.getElementById('navLinks');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchBox = document.getElementById('searchBox');
+  
+    menuIcon.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+    });
+  
+    searchBtn.addEventListener('click', () => {
+      searchBox.style.display =
+        searchBox.style.display === 'block' ? 'none' : 'block';
+    });
+  </script>
+  
+</html>
