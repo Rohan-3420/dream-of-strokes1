@@ -178,7 +178,7 @@
 
  .hero {
   height: 600px;
-  background: url('bg/anna-daudelin-BLq9ApXyFnk-unsplash.jpg') center/cover no-repeat;
+  background: url('assets/background/banner.jpg') center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
