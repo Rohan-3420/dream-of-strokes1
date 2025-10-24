@@ -123,34 +123,34 @@
           </div>
 
           <div class="art-card">
-            <a href="painting2.html"><img src="assets/products/fasih s1.jpeg" alt="The Apples" loading="lazy"></a>
+            <a href="product buy/painting1a.html"><img src="assets/products/fasih s1.jpeg" alt="The Apples" loading="lazy"></a>
             <h3>The Apples</h3>
             <p><strong>Rs.5,000.00</strong><br>PKR</p>
           </div>
 
           <div class="art-card">
-            <a href="product buy/painting1f .html"><img src="assets/products/talha m2.png" alt="The Apples" loading="lazy"></a>
-            <h3>The Apples</h3>
+            <a href="product buy/painting1f .html"><img src="assets/products/talha m2.png" alt="Mosaic Art" loading="lazy"></a>
+            <h3>Mosaic Art</h3>
             <p><strong>Rs.5,000.00</strong><br>PKR</p>
           </div>
     
           <div class="art-card">
-            <a href="painting3.html"><img src="assets/products/rohan c3.png" alt="Still Life (Apples)" loading="lazy"></a>
-            <h3>Still Life (Apples)</h3>
+            <a href="product buy/painting1r.html"><img src="assets/products/rohan c3.png" alt="Arabic Calligraphy" loading="lazy"></a>
+            <h3>Arabic Calligraphy</h3>
             <p><strong>Rs.9,000.00</strong><br>PKR</p>
           </div>
 
           <div class="art-card">
-            <a href="painting3.html"><img src="assets/products/fasih c2.png" alt="Still Life (Apples)" loading="lazy"></a>
-            <h3>Still Life (Apples)</h3>
+            <a href="product buy/painting2r.html"><img src="assets/products/fasih c2.png" alt="Calligraphy Art" loading="lazy"></a>
+            <h3>Calligraphy Art</h3>
             <p><strong>Rs.9,000.00</strong><br>PKR</p>
           </div>
           
     
           <!-- add more .art-card blocks as needed -->
           <div class="art-card">
-            <a href="painting3.html"><img src="assets/products/ahmad c1.png" alt="Still Life (Apples)" loading="lazy"></a>
-            <h3>Still Life (Apples)</h3>
+            <a href="product buy/painting1a.html"><img src="assets/products/ahmad c1.png" alt="Still Life" loading="lazy"></a>
+            <h3>Still Life</h3>
             <p><strong>Rs.9,000.00</strong><br>PKR</p>
           </div>
         </div>
@@ -213,54 +213,4 @@
 
 
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchBtn = document.querySelector('.search-btn');
-    const searchBox = document.querySelector('.search-box');
-  
-    if (!searchBtn || !searchBox) return;
-  
-    if (!searchBtn.hasAttribute('type')) searchBtn.type = 'button';
-    const innerBtn = searchBox.querySelector('button');
-    if (innerBtn && !innerBtn.hasAttribute('type')) innerBtn.type = 'button';
-  
-    searchBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      searchBox.classList.toggle('active');
-      if (searchBox.classList.contains('active')) {
-        const input = searchBox.querySelector('input');
-        if (input) input.focus();
-      }
-    });
-  
-    document.addEventListener('click', (e) => {
-      if (!searchBox.contains(e.target) && !searchBtn.contains(e.target)) {
-        searchBox.classList.remove('active');
-      }
-    });
-  
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') searchBox.classList.remove('active');
-    });
-  });
-
-
-
-  
-document.addEventListener('scroll', () => {
-  const navbar = document.querySelector('.navbar');
-  if (!navbar) return;
-
-  if (window.innerWidth > 768) {
-    if (window.scrollY > 60) {
-      navbar.classList.add('shrink');
-    } else {
-      navbar.classList.remove('shrink');
-    }
-  }
-});
-
-
-  </script>
-  
-</html>
+  <script src="script.js"></script>

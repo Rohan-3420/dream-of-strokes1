@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="assets/logo/fevicon.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -51,7 +52,7 @@
       </div>
 
       <div class="team-member">
-        <img src="logo/Artist/WhatsApp Image 2025-10-14 at 10.14.18 AM.jpeg" alt="Talha Abuzar">
+        <img src="assets/Artist/talha2.jpeg" alt="Talha Abuzar">
         <h3>Talha Abuzar</h3>
         <p>Mosaic Artist</p>
         <span> An artist from Pakistan who works towards visual inspiration drawn from nature, explores the themes of 2D and 3D dimensions, starting his journey at the age of 12 in 2021.
@@ -59,7 +60,7 @@
       </div>
 
       <div class="team-member">
-        <img src="logo/Artist/WhatsApp Image 2025-10-12 at 8.39.10 AM (1).jpeg" alt="Fasih-ur-Rehman">
+        <img src="assets/Artist/fasih2.jpeg" alt="Fasih-ur-Rehman">
         <h3>Fasih-ur-Rehman</h3>
         <p>Calligraphy Specialist</p>
         <span>An artist from Pakistan has devotion of mainly Arabic calligraphy and inspired by the imagination and visualisation of natural artistic theme, start in the age of 13 in 2021.</span>
@@ -113,55 +114,6 @@
     <p>© 2025 Dream of Strokes | All Rights Reserved | Made by <span>Rohan Shahzad</span></p>
   </footer>
 
+  <script src="script.js"></script>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchBtn = document.querySelector('.search-btn');
-      const searchBox = document.querySelector('.search-box');
-    
-      if (!searchBtn || !searchBox) return;
-    
-      if (!searchBtn.hasAttribute('type')) searchBtn.type = 'button';
-      const innerBtn = searchBox.querySelector('button');
-      if (innerBtn && !innerBtn.hasAttribute('type')) innerBtn.type = 'button';
-    
-      searchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        searchBox.classList.toggle('active');
-        if (searchBox.classList.contains('active')) {
-          const input = searchBox.querySelector('input');
-          if (input) input.focus();
-        }
-      });
-    
-      document.addEventListener('click', (e) => {
-        if (!searchBox.contains(e.target) && !searchBtn.contains(e.target)) {
-          searchBox.classList.remove('active');
-        }
-      });
-    
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') searchBox.classList.remove('active');
-      });
-    });
-  
-  
-  
-    
-  document.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
-  
-    if (window.innerWidth > 768) {
-      if (window.scrollY > 60) {
-        navbar.classList.add('shrink');
-      } else {
-        navbar.classList.remove('shrink');
-      }
-    }
-  });
-  
-  
-    </script>
-    
 </html>

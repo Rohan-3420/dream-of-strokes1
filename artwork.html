@@ -13,35 +13,29 @@
 </head>
 
 <body>
-
-
-    <body>
-        <div class="header">
-          <header>
+  <header>
     <p class="head">Welcome to Dream of Strokes!</p>
   </header>
 
           <!-- Paste the entire navbar here -->
-          <nav class="navbar">
-            <input type="checkbox" id="menu-toggle">
-            <label for="menu-toggle" class="menu-icon">&#9776;</label>
-      
-            <ul class="nav-links">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="artwork.html" class="active">View Artwork</a></li>
-              <li><a href="about.html">About us</a></li>
-              <li><a href="contact.html">Contact</a></li>
-            </ul>
-      
-            <img src="assets/logo/nav.png" alt="image" class="logo">
-      
-            <div class="search-box">
-              <input type="text" placeholder="Search here...">
-              <button><i class="fa fa-search"></i></button>
-            </div>
-          </nav>
-        </div>
-      </body>
+  <nav class="navbar">
+    <input type="checkbox" id="menu-toggle">
+    <label for="menu-toggle" class="menu-icon">&#9776;</label>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="artwork.html" class="active">View Artwork</a></li>
+      <li><a href="about.html">About us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <img src="assets/logo/nav.png" alt="image" class="logo">
+
+    <div class="search-box">
+      <input type="text" placeholder="Search here...">
+      <button><i class="fa fa-search"></i></button>
+    </div>
+  </nav>
       
 
       
@@ -58,39 +52,39 @@
   </section>
 
   <section class="art-grid">
-    <div class="art-card" data-category="still-life">
-      <img src="assets/products/ahmed s1.png" alt="Still Life Painting">
+    <div class="art-card" data-category="still">
+      <img src="assets/products/fasih s1.jpeg" alt="Still Life Painting">
       <div class="art-info">
-        <h3>The Apples</h3>
+        <h3>Still Life</h3>
         <p>Rs. 5,000 PKR</p>
-        <a href="painting1.html" class="view-btn">View Details</a>
+        <a href="product buy/painting1a.html" class="view-btn">View Details</a>
       </div>
     </div>
 
-    <div class="art-card" data-category="calligraphy">
-      <img src="assets/products/fasih s1.jpeg" alt="Arabic Calligraphy">
+    <div class="art-card" data-category="calli">
+      <img src="assets/products/rohan c1.jpeg" alt="Arabic Calligraphy">
       <div class="art-info">
         <h3>Arabic Calligraphy</h3>
-        <p>Rs. 7,500 PKR</p>
-        <a href="painting2.html" class="view-btn">View Details</a>
+        <p>Rs. 50,000 PKR</p>
+        <a href="product buy/painting1r.html" class="view-btn">View Details</a>
       </div>
     </div>
 
-    <div class="art-card" data-category="scenery">
-      <img src="assets/products/fasih c1.png" alt="Mountain Scenery">
+    <div class="art-card" data-category="calli">
+      <img src="assets/products/rohan c2.jpeg" alt="Arabic Calligraphy Brown">
       <div class="art-info">
-        <h3>Mountain Scenery</h3>
-        <p>Rs. 9,000 PKR</p>
-        <a href="painting3.html" class="view-btn">View Details</a>
+        <h3>Arabic Calligraphy (Brown)</h3>
+        <p>Rs. 25,000 PKR</p>
+        <a href="product buy/painting2r.html" class="view-btn">View Details</a>
       </div>
     </div>
 
-    <div class="art-card" data-category="still-life">
-      <img src="assets/products/rohan c1.jpeg" alt="Fruit Bowl">
+    <div class="art-card" data-category="sce">
+      <img src="assets/products/talha m2.png" alt="Mosaic Art">
       <div class="art-info">
-        <h3>Fruit Bowl</h3>
-        <p>Rs. 6,500 PKR</p>
-        <a href="painting4.html" class="view-btn">View Details</a>
+        <h3>Mosaic Art</h3>
+        <p>Rs. 5,000 PKR</p>
+        <a href="product buy/painting1f .html" class="view-btn">View Details</a>
       </div>
     </div>
   </section>
@@ -114,7 +108,7 @@
         <div class="social-icons">
           <a href="https://www.instagram.com/dream_of_strokes?igsh=aDk5NWxla3BwOTMw"><i class="fa-brands fa-instagram"></i></a>
           <a href="https://www.facebook.com/share/1Fi6vQ2dS7/"><i class="fa-brands fa-facebook"></i></a>
-          <a href="https://www.tiktok.com/@dream.of.strokes?_t=ZS-90nIJmYmaXc&_r=1"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://www.tiktok.com/@dream.of.strokes?_t=ZS-90nIJmYmaXc&_r=1"><i class="fa-brands fa-tiktok"></i></a>
         </div>
       </div>
   
@@ -135,95 +129,7 @@
   <footer class="footer-bottom">
     <p>© 2025 Dream of Strokes | All Rights Reserved | Made by <span>Rohan Shahzad</span></p>
   </footer>
-</body> 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchBtn = document.querySelector('.search-btn');
-      const searchBox = document.querySelector('.search-box');
-    
-      if (!searchBtn || !searchBox) return;
-    
-      if (!searchBtn.hasAttribute('type')) searchBtn.type = 'button';
-      const innerBtn = searchBox.querySelector('button');
-      if (innerBtn && !innerBtn.hasAttribute('type')) innerBtn.type = 'button';
-    
-      searchBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        searchBox.classList.toggle('active');
-        if (searchBox.classList.contains('active')) {
-          const input = searchBox.querySelector('input');
-          if (input) input.focus();
-        }
-      });
-    
-      document.addEventListener('click', (e) => {
-        if (!searchBox.contains(e.target) && !searchBtn.contains(e.target)) {
-          searchBox.classList.remove('active');
-        }
-      });
-    
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') searchBox.classList.remove('active');
-      });
-    });
-  
-  
-  
-    
-  document.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
-  
-    if (window.innerWidth > 768) {
-      if (window.scrollY > 60) {
-        navbar.classList.add('shrink');
-      } else {
-        navbar.classList.remove('shrink');
-      }
-    }
-  });
-  
-  
-    </script>
-    
 
-
-<script>
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const artCards = document.querySelectorAll('.art-card');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.getAttribute('data-filter');
-
-        artCards.forEach(card => {
-          card.style.display =
-            filter === 'all' || card.dataset.category === filter
-              ? 'block'
-              : 'none';
-        });
-      });
-    });
-
-
-  </script>
-
-<script>
-    const menuIcon = document.getElementById('menuIcon');
-    const navLinks = document.getElementById('navLinks');
-    const searchBtn = document.getElementById('searchBtn');
-    const searchBox = document.getElementById('searchBox');
-  
-    menuIcon.addEventListener('click', () => {
-      navLinks.classList.toggle('show');
-    });
-  
-    searchBtn.addEventListener('click', () => {
-      searchBox.style.display =
-        searchBox.style.display === 'block' ? 'none' : 'block';
-    });
-  </script>
-  
+  <script src="script.js"></script>
+</body>
 </html>
