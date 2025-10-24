@@ -279,3 +279,71 @@
     display: none;
   }
 }
+
+/* === Dynamic Gallery Card Styles === */
+.art-card a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.card-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  color: #000;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 10;
+}
+
+.card-info {
+  padding: 20px;
+}
+
+.card-category {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(30, 144, 255, 0.2);
+  color: #1e90ff;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-info h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.card-artist {
+  font-size: 0.9rem;
+  color: #1e90ff;
+  margin-bottom: 8px;
+}
+
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4da6ff;
+  margin: 0;
+}
+
+/* Spin animation for loader */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Panel - Dream of Strokes</title>
+  <link rel="icon" href="images/logo/fevicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="login-container">
+    <div class="login-box">
+      <div class="login-header">
+        <img src="images/logo/nav.png" alt="Dream of Strokes" class="login-logo">
+        <h1>Admin Panel</h1>
+        <p>Enter password to access dashboard</p>
+      </div>
+      <form id="login-form" class="login-form">
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="password-input" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="login-btn">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
+        </button>
+        <p id="login-error" class="error-message"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-dashboard" class="dashboard-container" style="display: none;">
+    <header class="dashboard-header">
+      <div class="header-content">
+        <img src="images/logo/nav.png" alt="Dream of Strokes" class="header-logo">
+        <h1>Product Management</h1>
+      </div>
+      <button id="logout-btn" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </header>
+
+    <main class="dashboard-main">
+      <!-- Add Product Section -->
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-plus-circle"></i> Add New Product</h2>
+        </div>
+        <form id="product-form" class="product-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="product-title">Product Title *</label>
+              <input type="text" id="product-title" required placeholder="e.g., Arabic Calligraphy">
+            </div>
+
+            <div class="form-group">
+              <label for="product-artist">Artist *</label>
+              <select id="product-artist" required>
+                <option value="">Select Artist</option>
+                <option value="Rohan Shahzad|923354581567">Rohan Shahzad</option>
+                <option value="Ahmad Abbas|923279784423">Ahmad Abbas</option>
+                <option value="Fasih-ur-Rehman|923158773306">Fasih-ur-Rehman</option>
+                <option value="Talha Abuzar|923217110997">Talha Abuzar</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="product-price">Price (PKR) *</label>
+              <input type="text" id="product-price" required placeholder="e.g., 50,000.00">
+            </div>
+
+            <div class="form-group">
+              <label for="product-category">Category *</label>
+              <select id="product-category" required>
+                <option value="">Select Category</option>
+                <option value="Calligraphy">Calligraphy</option>
+                <option value="Still Life">Still Life</option>
+                <option value="Scenery">Scenery</option>
+                <option value="Mosaic">Mosaic</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="product-image">Image Path *</label>
+              <input type="text" id="product-image" required placeholder="e.g., images/products/painting.jpg">
+              <small>Upload image to images/products/ folder first, then enter path</small>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="product-description">Description *</label>
+              <textarea id="product-description" rows="4" required placeholder="Describe the artwork..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="product-featured">
+                <span>Featured Product</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Add Product
+            </button>
+            <button type="reset" class="btn btn-secondary">
+              <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Products List -->
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-box"></i> All Products (<span id="product-count">0</span>)</h2>
+        </div>
+        <div id="products-list" class="products-list">
+          <!-- Products will be loaded here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
+
