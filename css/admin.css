@@ -442,6 +442,76 @@ body {
   }
 }
 
+/* === REVIEWS MANAGEMENT === */
+.reviews-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.review-card {
+  background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
+  border: 1px solid rgba(30, 144, 255, 0.2);
+  border-radius: 15px;
+  padding: 25px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.2);
+  border-color: rgba(30, 144, 255, 0.4);
+}
+
+.review-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.review-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(30, 144, 255, 0.3);
+}
+
+.review-info h3 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.review-rating {
+  font-size: 1rem;
+  color: #ffd700;
+}
+
+.review-text {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.review-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.1rem;
+  grid-column: 1 / -1;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
   .login-box {
@@ -477,6 +547,10 @@ body {
   }
 
   .products-list {
+    grid-template-columns: 1fr;
+  }
+
+  .reviews-list {
     grid-template-columns: 1fr;
   }
 }

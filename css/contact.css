@@ -29,7 +29,7 @@ body {
 .contact-hero {
   background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(0, 0, 0, 0.95) 100%),
               url('../images/background/banner.jpg') center/cover no-repeat;
-  padding: 120px 5% 80px;
+  padding: 120px clamp(24px, 6vw, 80px) 80px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -89,9 +89,10 @@ body {
 
 /* === Contact Section === */
 .contact-section {
-  padding: 80px 5%;
-  max-width: 1400px;
+  padding: 80px clamp(24px, 6vw, 80px);
+  max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .contact-grid {
@@ -229,16 +230,18 @@ body {
 
 /* === Additional Contact Info === */
 .additional-contact {
-  padding: 60px 5%;
+  padding: 60px clamp(24px, 6vw, 80px);
   background: linear-gradient(145deg, rgba(30, 144, 255, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%);
-  margin: 0 5%;
+  margin: 0 auto;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  max-width: 1200px;
+  width: 100%;
 }
 
 .additional-contact-content {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 40px;
@@ -288,9 +291,10 @@ body {
 
 /* === FAQ Section === */
 .faq-section {
-  padding: 80px 5%;
+  padding: 50px clamp(24px, 6vw, 80px) 90px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 60px auto 0;
+  width: 100%;
 }
 
 .faq-section h2 {
@@ -359,7 +363,7 @@ body {
 /* === Responsive Design === */
 @media (max-width: 768px) {
   .contact-hero {
-    padding: 100px 5% 60px;
+    padding: 90px 24px 60px;
   }
 
   .contact-hero h1 {
@@ -371,7 +375,7 @@ body {
   }
 
   .contact-section {
-    padding: 60px 5%;
+    padding: 60px 24px;
   }
 
   .contact-grid {
@@ -380,8 +384,8 @@ body {
   }
 
   .additional-contact {
-    padding: 40px 5%;
-    margin: 0 20px;
+    padding: 40px 24px;
+    margin: 20px auto 0;
   }
 
   .additional-contact-content {
@@ -390,7 +394,8 @@ body {
   }
 
   .faq-section {
-    padding: 60px 5%;
+    padding: 50px 24px 70px;
+    margin-top: 30px;
   }
 
   .faq-section h2 {
@@ -404,6 +409,10 @@ body {
 }
 
 @media (max-width: 480px) {
+  .contact-hero {
+    padding: 80px 20px 50px;
+  }
+
   .contact-hero h1 {
     font-size: 1.6rem;
   }
@@ -435,9 +444,13 @@ body {
     font-size: 0.9rem;
   }
 
+  .contact-section {
+    padding: 45px 20px;
+  }
+
   .additional-contact {
-    padding: 30px 5%;
-    margin: 0 10px;
+    padding: 30px 20px;
+    margin: 20px auto 0;
   }
 
   .contact-info-block {
@@ -461,6 +474,11 @@ body {
 
   .faq-item {
     padding: 25px 20px;
+  }
+
+  .faq-section {
+    padding: 45px 20px 60px;
+    margin-top: 25px;
   }
 
   .faq-item h3 {

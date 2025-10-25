@@ -123,6 +123,7 @@ function displayProducts(products) {
   container.innerHTML = products.map(product => `
     <div class="product-card" style="position: relative;">
       ${product.featured ? '<div class="featured-badge"><i class="fa-solid fa-star"></i> Featured</div>' : ''}
+      ${product.sold ? '<div class="sold-badge-admin"><i class="fa-solid fa-circle-check"></i> SOLD</div>' : ''}
       <img src="${product.image}" alt="${product.title}" class="product-card-image" onerror="this.src='images/logo/nav.png'">
       <div class="product-card-content">
         <div class="product-card-header">
@@ -133,8 +134,12 @@ function displayProducts(products) {
           <p class="product-card-price">Rs. ${product.price}</p>
         </div>
         <span class="product-card-category">${product.category}</span>
+        ${product.sold ? '<span class="product-status sold">✅ SOLD</span>' : '<span class="product-status available">🟢 Available</span>'}
         <p class="product-card-description">${product.description}</p>
         <div class="product-card-actions">
+          <button onclick="editProduct(${product.id})" class="btn btn-primary btn-small">
+            <i class="fa-solid fa-edit"></i> Edit
+          </button>
           <button onclick="viewProduct(${product.id})" class="btn btn-secondary btn-small">
             <i class="fa-solid fa-eye"></i> View
           </button>
@@ -147,36 +152,90 @@ function displayProducts(products) {
   `).join('');
 }
 
-// Add product
+// Track edit mode
+let editingProductId = null;
+
+// Add or Update product
 document.getElementById('product-form').addEventListener('submit', function(e) {
   e.preventDefault();
   
-  const artistData = document.getElementById('product-artist').value.split('|');
-  
-  const newProduct = {
-    id: Date.now(),
+  const productData = {
     title: document.getElementById('product-title').value,
-    artist: artistData[0],
-    artistContact: artistData[1],
+    artist: document.getElementById('product-artist').value,
+    artistContact: document.getElementById('product-contact').value,
     price: document.getElementById('product-price').value,
     category: document.getElementById('product-category').value,
     image: document.getElementById('product-image').value,
     description: document.getElementById('product-description').value,
-    featured: document.getElementById('product-featured').checked
+    featured: document.getElementById('product-featured').checked,
+    sold: document.getElementById('product-sold').checked
   };
   
   let products = getProducts();
-  products.push(newProduct);
+  
+  if (editingProductId) {
+    // Update existing product
+    const index = products.findIndex(p => p.id === editingProductId);
+    if (index !== -1) {
+      products[index] = { ...products[index], ...productData };
+      alert('Product updated successfully! ✅');
+    }
+    editingProductId = null;
+    document.querySelector('.btn-primary').innerHTML = '<i class="fa-solid fa-plus"></i> Add Product';
+  } else {
+    // Add new product
+    const newProduct = {
+      id: Date.now(),
+      ...productData
+    };
+    products.push(newProduct);
+    alert('Product added successfully! ✅');
+  }
+  
   saveProducts(products);
+  
+  // Update category suggestions
+  updateCategorySuggestions(products);
   
   displayProducts(products);
   this.reset();
   
-  alert('Product added successfully! ✅');
-  
   // Scroll to products list
   document.getElementById('products-list').scrollIntoView({ behavior: 'smooth' });
 });
+
+// Update category suggestions based on existing products
+function updateCategorySuggestions(products) {
+  const categories = [...new Set(products.map(p => p.category))];
+  const datalist = document.getElementById('category-suggestions');
+  datalist.innerHTML = categories.map(cat => `<option value="${cat}">`).join('');
+}
+
+// Edit product
+function editProduct(id) {
+  const products = getProducts();
+  const product = products.find(p => p.id === id);
+  
+  if (!product) return;
+  
+  // Populate form with product data
+  document.getElementById('product-title').value = product.title;
+  document.getElementById('product-artist').value = product.artist;
+  document.getElementById('product-contact').value = product.artistContact;
+  document.getElementById('product-price').value = product.price;
+  document.getElementById('product-category').value = product.category;
+  document.getElementById('product-image').value = product.image;
+  document.getElementById('product-description').value = product.description;
+  document.getElementById('product-featured').checked = product.featured || false;
+  document.getElementById('product-sold').checked = product.sold || false;
+  
+  // Set edit mode
+  editingProductId = id;
+  document.querySelector('.btn-primary').innerHTML = '<i class="fa-solid fa-save"></i> Update Product';
+  
+  // Scroll to form
+  document.getElementById('product-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 // Delete product
 function deleteProduct(id) {
@@ -194,6 +253,151 @@ function viewProduct(id) {
   window.open(`product.html?id=${id}`, '_blank');
 }
 
+// ==================== REVIEWS MANAGEMENT ====================
+
+// Get reviews from localStorage
+function getReviews() {
+  const stored = localStorage.getItem('dreamReviews');
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  // Default reviews
+  const defaultReviews = [
+    {
+      id: 1,
+      name: "Hammad Shahzad",
+      image: "images/background/bhai.png",
+      text: "Rohan Shahzad, at just 16 years old, is already an incredible artist with a natural talent for creating beautiful, captivating paintings. His work reflects a maturity and creativity well beyond his years, leaving a lasting impression on everyone who views it. The future looks bright for this young prodigy.",
+      rating: 5,
+      featured: true
+    }
+  ];
+  localStorage.setItem('dreamReviews', JSON.stringify(defaultReviews));
+  return defaultReviews;
+}
+
+// Save reviews to localStorage
+function saveReviews(reviews) {
+  localStorage.setItem('dreamReviews', JSON.stringify(reviews));
+}
+
+// Display reviews in admin panel
+function displayReviews(reviews) {
+  const container = document.getElementById('reviews-list');
+  if (!container) return;
+  
+  if (reviews.length === 0) {
+    container.innerHTML = '<p class="empty-state">No reviews yet. Add your first review above!</p>';
+    return;
+  }
+  
+  container.innerHTML = reviews.map(review => `
+    <div class="review-card">
+      ${review.featured ? '<div class="featured-badge"><i class="fa-solid fa-star"></i> Featured</div>' : ''}
+      <div class="review-card-header">
+        <img src="${review.image}" alt="${review.name}" class="review-avatar" onerror="this.src='images/logo/nav.png'">
+        <div class="review-info">
+          <h3>${review.name}</h3>
+          <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
+        </div>
+      </div>
+      <p class="review-text">"${review.text}"</p>
+      <div class="review-actions">
+        <button onclick="editReview(${review.id})" class="btn btn-primary btn-small">
+          <i class="fa-solid fa-edit"></i> Edit
+        </button>
+        <button onclick="deleteReview(${review.id})" class="btn btn-danger btn-small">
+          <i class="fa-solid fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Track edit mode for reviews
+let editingReviewId = null;
+
+// Add or Update review
+document.getElementById('review-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const reviewData = {
+    name: document.getElementById('review-name').value,
+    image: document.getElementById('review-image').value,
+    text: document.getElementById('review-text').value,
+    rating: parseInt(document.getElementById('review-rating').value),
+    featured: document.getElementById('review-featured').checked
+  };
+  
+  let reviews = getReviews();
+  
+  if (editingReviewId) {
+    // Update existing review
+    const index = reviews.findIndex(r => r.id === editingReviewId);
+    if (index !== -1) {
+      reviews[index] = { ...reviews[index], ...reviewData };
+      alert('Review updated successfully! ✅');
+    }
+    editingReviewId = null;
+    document.querySelector('.review-submit-btn').innerHTML = '<i class="fa-solid fa-plus"></i> Add Review';
+  } else {
+    // Add new review
+    const newReview = {
+      id: Date.now(),
+      ...reviewData
+    };
+    reviews.push(newReview);
+    alert('Review added successfully! ✅');
+  }
+  
+  saveReviews(reviews);
+  displayReviews(reviews);
+  this.reset();
+});
+
+// Edit review
+function editReview(id) {
+  const reviews = getReviews();
+  const review = reviews.find(r => r.id === id);
+  
+  if (!review) return;
+  
+  // Populate form with review data
+  document.getElementById('review-name').value = review.name;
+  document.getElementById('review-image').value = review.image;
+  document.getElementById('review-text').value = review.text;
+  document.getElementById('review-rating').value = review.rating;
+  document.getElementById('review-featured').checked = review.featured || false;
+  
+  // Set edit mode
+  editingReviewId = id;
+  document.querySelector('.review-submit-btn').innerHTML = '<i class="fa-solid fa-save"></i> Update Review';
+  
+  // Scroll to form
+  document.getElementById('review-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Delete review
+function deleteReview(id) {
+  if (confirm('Are you sure you want to delete this review?')) {
+    let reviews = getReviews();
+    reviews = reviews.filter(r => r.id !== id);
+    saveReviews(reviews);
+    displayReviews(reviews);
+    alert('Review deleted successfully! ✅');
+  }
+}
+
 // Initialize
 checkAuth();
+
+// Update category suggestions on load
+if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+  const products = getProducts();
+  updateCategorySuggestions(products);
+  
+  // Load reviews
+  const reviews = getReviews();
+  displayReviews(reviews);
+}
 
