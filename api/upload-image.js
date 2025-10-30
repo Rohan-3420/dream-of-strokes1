@@ -1,12 +1,5 @@
 // Vercel Serverless Function to upload images to Supabase Storage
 import { createClient } from '@supabase/supabase-js';
-import Busboy from 'busboy';
-
-export const config = {
-  api: {
-    bodyParser: false, // Disable body parsing for file uploads
-  },
-};
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -42,37 +35,56 @@ export default async function handler(req, res) {
   );
   
   try {
-    // Parse multipart form data with Busboy
-    const busboy = Busboy({ headers: req.headers });
+    // Read raw body
+    const chunks = [];
+    for await (const chunk of req) {
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+    
+    // Parse multipart manually
+    const contentType = req.headers['content-type'] || '';
+    const boundaryMatch = contentType.match(/boundary=(.+)$/);
+    
+    if (!boundaryMatch) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid content type'
+      });
+    }
+    
+    const boundary = '--' + boundaryMatch[1];
+    const parts = buffer.toString('binary').split(boundary);
     
     let fileBuffer = null;
-    let fileName = null;
-    let mimeType = null;
+    let fileName = 'image.jpg';
+    let mimeType = 'image/jpeg';
     
-    // Wait for file upload
-    await new Promise((resolve, reject) => {
-      busboy.on('file', (fieldname, file, info) => {
-        const { filename, mimeType: fileMimeType } = info;
-        fileName = filename;
-        mimeType = fileMimeType;
+    for (const part of parts) {
+      if (part.includes('Content-Disposition') && part.includes('filename=')) {
+        // Extract filename
+        const filenameMatch = part.match(/filename="([^"]+)"/);
+        if (filenameMatch) {
+          fileName = filenameMatch[1];
+        }
         
-        const chunks = [];
-        file.on('data', (data) => {
-          chunks.push(data);
-        });
+        // Extract mime type
+        const mimeMatch = part.match(/Content-Type: ([^\r\n]+)/);
+        if (mimeMatch) {
+          mimeType = mimeMatch[1];
+        }
         
-        file.on('end', () => {
-          fileBuffer = Buffer.concat(chunks);
-        });
-      });
-      
-      busboy.on('finish', resolve);
-      busboy.on('error', reject);
-      
-      req.pipe(busboy);
-    });
+        // Extract file data
+        const dataStart = part.indexOf('\r\n\r\n');
+        if (dataStart !== -1) {
+          const dataEnd = part.lastIndexOf('\r\n');
+          const fileData = part.substring(dataStart + 4, dataEnd);
+          fileBuffer = Buffer.from(fileData, 'binary');
+        }
+      }
+    }
     
-    if (!fileBuffer || !fileName) {
+    if (!fileBuffer) {
       return res.status(400).json({
         success: false,
         message: 'No image file provided'
