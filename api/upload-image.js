@@ -1,5 +1,6 @@
 // Vercel Serverless Function to upload images to Supabase Storage
 import { createClient } from '@supabase/supabase-js';
+import Busboy from 'busboy';
 
 export const config = {
   api: {
@@ -26,6 +27,14 @@ export default async function handler(req, res) {
     });
   }
   
+  // Check environment variables
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+    return res.status(500).json({
+      success: false,
+      message: 'Supabase credentials not configured'
+    });
+  }
+  
   // Initialize Supabase client
   const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -33,42 +42,35 @@ export default async function handler(req, res) {
   );
   
   try {
-    // Parse multipart form data
-    const chunks = [];
-    for await (const chunk of req) {
-      chunks.push(chunk);
-    }
-    const buffer = Buffer.concat(chunks);
-    
-    // Parse form data
-    const boundary = req.headers['content-type'].split('boundary=')[1];
-    const parts = buffer.toString('binary').split(`--${boundary}`);
+    // Parse multipart form data with Busboy
+    const busboy = Busboy({ headers: req.headers });
     
     let fileBuffer = null;
     let fileName = null;
-    let contentType = null;
+    let mimeType = null;
     
-    for (const part of parts) {
-      if (part.includes('Content-Disposition: form-data; name="image"')) {
-        // Extract filename
-        const fileNameMatch = part.match(/filename="(.+?)"/);
-        if (fileNameMatch) {
-          fileName = fileNameMatch[1];
-        }
+    // Wait for file upload
+    await new Promise((resolve, reject) => {
+      busboy.on('file', (fieldname, file, info) => {
+        const { filename, mimeType: fileMimeType } = info;
+        fileName = filename;
+        mimeType = fileMimeType;
         
-        // Extract content type
-        const contentTypeMatch = part.match(/Content-Type: (.+?)\r\n/);
-        if (contentTypeMatch) {
-          contentType = contentTypeMatch[1];
-        }
+        const chunks = [];
+        file.on('data', (data) => {
+          chunks.push(data);
+        });
         
-        // Extract file content
-        const contentStart = part.indexOf('\r\n\r\n') + 4;
-        const contentEnd = part.lastIndexOf('\r\n');
-        fileBuffer = Buffer.from(part.slice(contentStart, contentEnd), 'binary');
-        break;
-      }
-    }
+        file.on('end', () => {
+          fileBuffer = Buffer.concat(chunks);
+        });
+      });
+      
+      busboy.on('finish', resolve);
+      busboy.on('error', reject);
+      
+      req.pipe(busboy);
+    });
     
     if (!fileBuffer || !fileName) {
       return res.status(400).json({
@@ -79,20 +81,21 @@ export default async function handler(req, res) {
     
     // Generate unique filename
     const timestamp = Date.now();
-    const ext = fileName.split('.').pop();
+    const ext = fileName.split('.').pop() || 'jpg';
     const uniqueFileName = `product-${timestamp}.${ext}`;
     
     // Upload to Supabase Storage
     const { data, error } = await supabase.storage
       .from('product-images')
       .upload(uniqueFileName, fileBuffer, {
-        contentType: contentType,
+        contentType: mimeType || 'image/jpeg',
         cacheControl: '3600',
         upsert: false
       });
     
     if (error) {
-      throw error;
+      console.error('Supabase upload error:', error);
+      throw new Error(error.message || 'Failed to upload to Supabase Storage');
     }
     
     // Get public URL
