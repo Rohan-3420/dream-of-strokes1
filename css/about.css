@@ -28,7 +28,7 @@ body {
 /* === About Hero Section === */
 .about-hero {
   background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(0, 0, 0, 0.95) 100%),
-              url('../images/background/about.jpg') center/cover no-repeat;
+              url('../images/background/about.jpg');
   padding: 120px 5% 80px;
   text-align: center;
   position: relative;
