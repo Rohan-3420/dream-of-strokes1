@@ -234,6 +234,15 @@ async function editProduct(id) {
   document.getElementById('product-featured').checked = product.featured || false;
   document.getElementById('product-sold').checked = product.sold || false;
   
+  // Show image previews if product has images
+  if (product.image) {
+    const urls = product.image.split(',').map(u => u.trim()).filter(u => u);
+    if (urls.length > 0) {
+      renderImagePreviews(urls);
+      document.getElementById('image-preview-container').style.display = 'block';
+    }
+  }
+  
   // Set edit mode
   editingProductId = id;
   document.querySelector('.btn-primary').innerHTML = '<i class="fa-solid fa-save"></i> Update Product';
@@ -279,6 +288,90 @@ function viewProduct(id) {
   window.open(`product.html?id=${id}`, '_blank');
 }
 
+
+// Render image previews with primary selection
+function renderImagePreviews(urls) {
+  const previewGrid = document.getElementById('image-preview-grid');
+  previewGrid.innerHTML = '';
+  
+  urls.forEach((url, index) => {
+    const imgWrapper = document.createElement('div');
+    imgWrapper.className = 'image-preview-item';
+    imgWrapper.dataset.url = url;
+    
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `Preview ${index + 1}`;
+    
+    // Primary badge
+    const primaryBadge = document.createElement('div');
+    primaryBadge.className = 'primary-badge' + (index === 0 ? ' active' : '');
+    primaryBadge.innerHTML = '<i class="fa-solid fa-star"></i> Primary';
+    
+    // Set as primary button
+    const setPrimaryBtn = document.createElement('button');
+    setPrimaryBtn.type = 'button';
+    setPrimaryBtn.className = 'set-primary-btn';
+    setPrimaryBtn.innerHTML = '<i class="fa-solid fa-star"></i> Set as Primary';
+    setPrimaryBtn.style.display = index === 0 ? 'none' : 'block';
+    
+    setPrimaryBtn.addEventListener('click', function() {
+      setAsPrimaryImage(url);
+    });
+    
+    // Remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'remove-image-btn';
+    removeBtn.innerHTML = '<i class="fa-solid fa-times"></i>';
+    removeBtn.title = 'Remove image';
+    
+    removeBtn.addEventListener('click', function() {
+      removeImage(url);
+    });
+    
+    imgWrapper.appendChild(img);
+    imgWrapper.appendChild(primaryBadge);
+    imgWrapper.appendChild(setPrimaryBtn);
+    imgWrapper.appendChild(removeBtn);
+    previewGrid.appendChild(imgWrapper);
+  });
+}
+
+// Set image as primary
+function setAsPrimaryImage(url) {
+  const imageInput = document.getElementById('product-image');
+  const urls = imageInput.value.split(',').map(u => u.trim()).filter(u => u);
+  
+  // Remove the selected URL and add it to the beginning
+  const filteredUrls = urls.filter(u => u !== url);
+  const reorderedUrls = [url, ...filteredUrls];
+  
+  // Update input field
+  imageInput.value = reorderedUrls.join(', ');
+  
+  // Re-render previews
+  renderImagePreviews(reorderedUrls);
+}
+
+// Remove image from selection
+function removeImage(url) {
+  const imageInput = document.getElementById('product-image');
+  const urls = imageInput.value.split(',').map(u => u.trim()).filter(u => u);
+  
+  // Remove the URL
+  const filteredUrls = urls.filter(u => u !== url);
+  
+  if (filteredUrls.length === 0) {
+    // No images left, hide preview container
+    imageInput.value = '';
+    document.getElementById('image-preview-container').style.display = 'none';
+  } else {
+    // Update input field and re-render
+    imageInput.value = filteredUrls.join(', ');
+    renderImagePreviews(filteredUrls);
+  }
+}
 
 // Image Upload Functionality
 document.getElementById('upload-image-btn').addEventListener('click', function() {
@@ -355,20 +448,8 @@ document.getElementById('product-image-file').addEventListener('change', async f
     // Set image URLs in input field (comma-separated for multiple)
     document.getElementById('product-image').value = uploadedUrls.join(', ');
     
-    // Show previews
-    previewGrid.innerHTML = '';
-    uploadedUrls.forEach(url => {
-      const imgWrapper = document.createElement('div');
-      imgWrapper.style.cssText = 'position: relative;';
-      
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = 'Preview';
-      img.style.cssText = 'width: 150px; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;';
-      
-      imgWrapper.appendChild(img);
-      previewGrid.appendChild(imgWrapper);
-    });
+    // Show previews with primary selection
+    renderImagePreviews(uploadedUrls);
     previewContainer.style.display = 'block';
     
     // Show success message
