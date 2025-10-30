@@ -42,6 +42,10 @@ async function loadProduct() {
   await loadRelatedProducts(product.category, product.id);
 }
 
+// Gallery state
+let currentImageIndex = 0;
+let productImages = [];
+
 // Display product
 function displayProduct(product) {
   // Hide loading, show product
@@ -51,9 +55,11 @@ function displayProduct(product) {
   // Update page title
   document.title = `${product.title} - Dream of Strokes`;
   
+  // Parse images (comma-separated URLs)
+  productImages = product.image.split(',').map(url => url.trim()).filter(url => url);
+  currentImageIndex = 0;
+  
   // Update product details
-  document.getElementById('product-image').src = product.image;
-  document.getElementById('product-image').alt = product.title;
   document.getElementById('product-title').textContent = product.title;
   document.getElementById('product-artist-name').textContent = product.artist;
   document.getElementById('product-price').textContent = `Rs. ${product.price} PKR`;
@@ -64,6 +70,9 @@ function displayProduct(product) {
   if (product.featured) {
     document.getElementById('product-featured-badge').style.display = 'inline-flex';
   }
+  
+  // Setup image gallery
+  setupImageGallery();
   
   // WhatsApp link
   const whatsappMsg = encodeURIComponent(`Hi! I'm interested in the "${product.title}" painting. Can you provide more details?`);
@@ -82,6 +91,84 @@ function displayProduct(product) {
   document.getElementById('product-image').addEventListener('click', function() {
     window.open(this.src, '_blank');
   });
+}
+
+// Setup image gallery
+function setupImageGallery() {
+  const mainImage = document.getElementById('product-image');
+  const thumbnailsContainer = document.getElementById('image-thumbnails');
+  const prevBtn = document.getElementById('prev-image');
+  const nextBtn = document.getElementById('next-image');
+  
+  // Display first image
+  updateMainImage();
+  
+  // If multiple images, show gallery controls
+  if (productImages.length > 1) {
+    // Show navigation buttons
+    prevBtn.style.display = 'flex';
+    nextBtn.style.display = 'flex';
+    
+    // Show thumbnails
+    thumbnailsContainer.style.display = 'flex';
+    
+    // Create thumbnails
+    thumbnailsContainer.innerHTML = productImages.map((url, index) => `
+      <div class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+        <img src="${url}" alt="Image ${index + 1}">
+      </div>
+    `).join('');
+    
+    // Add thumbnail click handlers
+    thumbnailsContainer.querySelectorAll('.thumbnail').forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        currentImageIndex = parseInt(this.dataset.index);
+        updateMainImage();
+        updateThumbnails();
+      });
+    });
+    
+    // Add navigation handlers
+    prevBtn.addEventListener('click', () => {
+      currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+      updateMainImage();
+      updateThumbnails();
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      currentImageIndex = (currentImageIndex + 1) % productImages.length;
+      updateMainImage();
+      updateThumbnails();
+    });
+    
+    // Add keyboard navigation
+    document.addEventListener('keydown', handleKeyboardNavigation);
+  }
+}
+
+// Update main image
+function updateMainImage() {
+  const mainImage = document.getElementById('product-image');
+  mainImage.src = productImages[currentImageIndex];
+  mainImage.alt = `Product image ${currentImageIndex + 1}`;
+}
+
+// Update thumbnail active state
+function updateThumbnails() {
+  document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
+    thumb.classList.toggle('active', index === currentImageIndex);
+  });
+}
+
+// Handle keyboard navigation
+function handleKeyboardNavigation(e) {
+  if (productImages.length <= 1) return;
+  
+  if (e.key === 'ArrowLeft') {
+    document.getElementById('prev-image').click();
+  } else if (e.key === 'ArrowRight') {
+    document.getElementById('next-image').click();
+  }
 }
 
 // Show not found

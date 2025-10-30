@@ -36,13 +36,17 @@ async function loadGallery(filterCategory = 'all', filterArtist = 'all') {
     return;
   }
   
-  galleryContainer.innerHTML = products.map(product => `
+  galleryContainer.innerHTML = products.map(product => {
+    // Get first image if multiple images are comma-separated
+    const firstImage = product.image.split(',')[0].trim();
+    
+    return `
     <article class="art-card" 
              data-category="${product.category.toLowerCase().replace(/\s+/g, '-')}" 
              data-artist="${product.artist.toLowerCase().replace(/\s+/g, '-')}">
       <a href="product.html?id=${product.id}">
         <div class="card-image">
-          <img src="${product.image}" alt="${product.title}" loading="lazy">
+          <img src="${firstImage}" alt="${product.title}" loading="lazy">
           ${product.featured ? '<span class="card-badge">Featured</span>' : ''}
         </div>
         <div class="card-info">
@@ -53,7 +57,8 @@ async function loadGallery(filterCategory = 'all', filterArtist = 'all') {
         </div>
       </a>
     </article>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // Generate filter buttons dynamically
@@ -149,15 +154,20 @@ async function loadFeaturedProducts() {
     return;
   }
   
-  featuredContainer.innerHTML = displayProducts.map(product => `
+  featuredContainer.innerHTML = displayProducts.map(product => {
+    // Get first image if multiple images are comma-separated
+    const firstImage = product.image.split(',')[0].trim();
+    
+    return `
     <div class="art-card">
       <a href="product.html?id=${product.id}">
-        <img src="${product.image}" alt="${product.title}" loading="lazy">
+        <img src="${firstImage}" alt="${product.title}" loading="lazy">
         <h3>${product.title}</h3>
         <p><strong>Rs. ${product.price}</strong><br>PKR</p>
       </a>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // Load sold products on homepage
@@ -175,13 +185,17 @@ async function loadSoldProducts() {
     return;
   }
   
-  soldContainer.innerHTML = sold.map(product => `
+  soldContainer.innerHTML = sold.map(product => {
+    // Get first image if multiple images are comma-separated
+    const firstImage = product.image.split(',')[0].trim();
+    
+    return `
     <article class="art-card sold-card">
       <div class="sold-overlay">
         <span class="sold-badge">SOLD</span>
       </div>
       <div class="card-image">
-        <img src="${product.image}" alt="${product.title}" loading="lazy">
+        <img src="${firstImage}" alt="${product.title}" loading="lazy">
       </div>
       <div class="card-info">
         <span class="card-category">${product.category}</span>
@@ -190,7 +204,8 @@ async function loadSoldProducts() {
         <p class="card-price">Rs. ${product.price}</p>
       </div>
     </article>
-  `).join('');
+  `;
+  }).join('');
 }
 
 

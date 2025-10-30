@@ -39,10 +39,25 @@
       <div class="artwork-container">
         <div class="artwork-image-wrapper">
           <span id="product-category-badge" class="category-badge"></span>
-          <img id="product-image" src="" alt="" class="artwork-image">
-          <div class="image-zoom-hint">
-            <i class="fa-solid fa-search-plus"></i> Click to enlarge
+          
+          <!-- Main Image Display -->
+          <div class="main-image-container">
+            <img id="product-image" src="" alt="" class="artwork-image">
+            <div class="image-zoom-hint">
+              <i class="fa-solid fa-search-plus"></i> Click to enlarge
+            </div>
+            
+            <!-- Navigation Arrows (only show if multiple images) -->
+            <button id="prev-image" class="image-nav-btn prev-btn" style="display: none;">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button id="next-image" class="image-nav-btn next-btn" style="display: none;">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
+          
+          <!-- Image Thumbnails (only show if multiple images) -->
+          <div id="image-thumbnails" class="image-thumbnails" style="display: none;"></div>
         </div>
 
         <div class="artwork-details">
