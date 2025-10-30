@@ -445,11 +445,20 @@ document.getElementById('product-image-file').addEventListener('change', async f
   
   // Update UI with results
   if (uploadedUrls.length > 0) {
+    // Get existing images
+    const imageInput = document.getElementById('product-image');
+    const existingUrls = imageInput.value
+      ? imageInput.value.split(',').map(u => u.trim()).filter(u => u)
+      : [];
+    
+    // Combine existing and new URLs
+    const allUrls = [...existingUrls, ...uploadedUrls];
+    
     // Set image URLs in input field (comma-separated for multiple)
-    document.getElementById('product-image').value = uploadedUrls.join(', ');
+    imageInput.value = allUrls.join(', ');
     
     // Show previews with primary selection
-    renderImagePreviews(uploadedUrls);
+    renderImagePreviews(allUrls);
     previewContainer.style.display = 'block';
     
     // Show success message
@@ -468,6 +477,9 @@ document.getElementById('product-image-file').addEventListener('change', async f
     uploadStatus.innerHTML = '<i class="fa-solid fa-exclamation-circle"></i> All uploads failed';
     uploadStatus.style.color = '#dc3545';
   }
+  
+  // Clear file input so user can upload same files again if needed
+  e.target.value = '';
 });
 
 // Initialize
