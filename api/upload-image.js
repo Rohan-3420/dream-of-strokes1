@@ -1,6 +1,13 @@
 // Vercel Serverless Function to upload images to Supabase Storage
 import { createClient } from '@supabase/supabase-js';
 
+// CRITICAL: Disable Vercel's automatic body parsing for file uploads
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
