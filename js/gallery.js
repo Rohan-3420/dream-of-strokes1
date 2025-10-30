@@ -139,25 +139,24 @@ async function loadFeaturedProducts() {
   if (!featuredContainer) return;
   
   const products = await getProducts();
-  const featured = products.filter(p => p.featured && !p.sold).slice(0, 4);
+  const featured = products.filter(p => p.featured && !p.sold);
   
-  if (featured.length === 0) return;
+  // If no featured products, show all available products
+  const displayProducts = featured.length > 0 ? featured : products.filter(p => !p.sold).slice(0, 8);
   
-  featuredContainer.innerHTML = featured.map(product => `
-    <article class="art-card">
+  if (displayProducts.length === 0) {
+    featuredContainer.innerHTML = '<p style="text-align: center; color: #999; padding: 40px; grid-column: 1 / -1;">No products available yet.</p>';
+    return;
+  }
+  
+  featuredContainer.innerHTML = displayProducts.map(product => `
+    <div class="art-card">
       <a href="product.html?id=${product.id}">
-        <div class="card-image">
-          <img src="${product.image}" alt="${product.title}" loading="lazy">
-          <span class="card-badge">Featured</span>
-        </div>
-        <div class="card-info">
-          <span class="card-category">${product.category}</span>
-          <h3>${product.title}</h3>
-          <p class="card-artist">${product.artist}</p>
-          <p class="card-price">Rs. ${product.price}</p>
-        </div>
+        <img src="${product.image}" alt="${product.title}" loading="lazy">
       </a>
-    </article>
+      <h3>${product.title}</h3>
+      <p><strong>Rs. ${product.price}</strong><br>PKR</p>
+    </div>
   `).join('');
 }
 
