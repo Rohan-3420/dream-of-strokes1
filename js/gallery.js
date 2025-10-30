@@ -1,72 +1,26 @@
 // Gallery Dynamic Product Loading
 
-// Get products from localStorage
-function getProducts() {
-  const stored = localStorage.getItem('dreamProducts');
-  if (stored) {
-    return JSON.parse(stored);
-  }
-  // Default products
-  const defaultProducts = [
-    {
-      id: 1,
-      title: "Arabic Calligraphy (Black & White)",
-      artist: "Rohan Shahzad",
-      artistContact: "923354581567",
-      price: "50,000.00",
-      category: "Calligraphy",
-      image: "images/products/rohan c1 (copy).jpeg",
-      description: "An elegant acrylic painting that showcases the beauty of Arabic script through bold black and white strokes.",
-      featured: true,
-      sold: false
-    },
-    {
-      id: 2,
-      title: "Islamic Calligraphy Canvas",
-      artist: "Rohan Shahzad",
-      artistContact: "923354581567",
-      price: "45,000.00",
-      category: "Calligraphy",
-      image: "images/products/rohan c2 (copy).jpeg",
-      description: "A beautiful Islamic calligraphy piece featuring intricate Arabic script on canvas.",
-      featured: true,
-      sold: false
-    },
-    {
-      id: 3,
-      title: "Colorful Calligraphy",
-      artist: "Fasih-ur-Rehman",
-      artistContact: "923158773306",
-      price: "40,000.00",
-      category: "Calligraphy",
-      image: "images/products/fasih c1.png",
-      description: "A stunning display of Arabic calligraphy expertise with vibrant colors.",
-      featured: false,
-      sold: false
-    },
-    {
-      id: 4,
-      title: "Still Life Composition",
-      artist: "Ahmad Abbas",
-      artistContact: "923279784423",
-      price: "35,000.00",
-      category: "Still Life",
-      image: "images/products/ahmad s1.png",
-      description: "A classic still life painting featuring everyday objects.",
-      featured: false,
-      sold: false
+// Get products from JSON file
+async function getProducts() {
+  try {
+    const response = await fetch('products.json');
+    if (!response.ok) {
+      throw new Error('Failed to load products');
     }
-  ];
-  localStorage.setItem('dreamProducts', JSON.stringify(defaultProducts));
-  return defaultProducts;
+    const data = await response.json();
+    return data.products || [];
+  } catch (error) {
+    console.error('Error loading products:', error);
+    return [];
+  }
 }
 
 // Load gallery on artwork page
-function loadGallery(filterCategory = 'all', filterArtist = 'all') {
+async function loadGallery(filterCategory = 'all', filterArtist = 'all') {
   const galleryContainer = document.getElementById('gallery-container');
   if (!galleryContainer) return;
   
-  let products = getProducts();
+  let products = await getProducts();
   
   // Apply filters
   if (filterCategory !== 'all') {
@@ -103,8 +57,8 @@ function loadGallery(filterCategory = 'all', filterArtist = 'all') {
 }
 
 // Generate filter buttons dynamically
-function generateFilters() {
-  const products = getProducts();
+async function generateFilters() {
+  const products = await getProducts();
   
   // Get unique categories and artists
   const categories = [...new Set(products.map(p => p.category))];
@@ -180,11 +134,11 @@ function setupFilters() {
 }
 
 // Load featured products on homepage
-function loadFeaturedProducts() {
+async function loadFeaturedProducts() {
   const featuredContainer = document.getElementById('featured-products');
   if (!featuredContainer) return;
   
-  const products = getProducts();
+  const products = await getProducts();
   const featured = products.filter(p => p.featured && !p.sold).slice(0, 4);
   
   if (featured.length === 0) return;
@@ -208,11 +162,11 @@ function loadFeaturedProducts() {
 }
 
 // Load sold products on homepage
-function loadSoldProducts() {
+async function loadSoldProducts() {
   const soldContainer = document.getElementById('sold-products');
   if (!soldContainer) return;
   
-  const products = getProducts();
+  const products = await getProducts();
   const sold = products.filter(p => p.sold).slice(0, 8);
   
   if (sold.length === 0) {
@@ -240,68 +194,20 @@ function loadSoldProducts() {
   `).join('');
 }
 
-// Get reviews from localStorage
-function getReviews() {
-  const stored = localStorage.getItem('dreamReviews');
-  if (stored) {
-    return JSON.parse(stored);
-  }
-  // Default review
-  return [
-    {
-      id: 1,
-      name: "Hammad Shahzad",
-      image: "images/background/bhai.png",
-      text: "Rohan Shahzad, at just 16 years old, is already an incredible artist with a natural talent for creating beautiful, captivating paintings. His work reflects a maturity and creativity well beyond his years, leaving a lasting impression on everyone who views it. The future looks bright for this young prodigy.",
-      rating: 5,
-      featured: true
-    }
-  ];
-}
-
-// Load testimonials on homepage
-function loadTestimonials() {
-  const testimonialContainer = document.getElementById('testimonial-content');
-  if (!testimonialContainer) return;
-  
-  const reviews = getReviews();
-  const featuredReview = reviews.find(r => r.featured) || reviews[0];
-  
-  if (!featuredReview) {
-    testimonialContainer.innerHTML = '<p style="color: #999; text-align: center;">No reviews yet.</p>';
-    return;
-  }
-  
-  testimonialContainer.innerHTML = `
-    <img src="${featuredReview.image}" alt="${featuredReview.name} testimonial photo" class="testimonial-img" loading="lazy">
-    <blockquote>
-      <div class="testimonial-rating">${'⭐'.repeat(featuredReview.rating)}</div>
-      <p class="testimonial-text">
-        ${featuredReview.text}
-      </p>
-      <footer>
-        <cite class="testimonial-name" id="testimonial-heading">— ${featuredReview.name}</cite>
-      </footer>
-    </blockquote>
-  `;
-}
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   // Generate filters first, then load gallery
   if (document.getElementById('gallery-container')) {
-    generateFilters();
+    await generateFilters();
     setupFilters();
-    loadGallery();
+    await loadGallery();
   }
   
   // Load featured products on homepage
-  loadFeaturedProducts();
+  await loadFeaturedProducts();
   
   // Load sold products on homepage
-  loadSoldProducts();
-  
-  // Load testimonials on homepage
-  loadTestimonials();
+  await loadSoldProducts();
 });
 

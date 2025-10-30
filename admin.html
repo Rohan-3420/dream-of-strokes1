@@ -123,65 +123,6 @@
         </form>
       </section>
 
-      <!-- Reviews Management -->
-      <section class="dashboard-section">
-        <div class="section-header">
-          <h2><i class="fa-solid fa-star"></i> Customer Reviews</h2>
-          <p>Manage testimonials displayed on homepage</p>
-        </div>
-        
-        <form id="review-form" class="admin-form">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="review-name">Customer Name *</label>
-              <input type="text" id="review-name" required placeholder="e.g., Hammad Shahzad">
-            </div>
-
-            <div class="form-group">
-              <label for="review-image">Customer Photo URL *</label>
-              <input type="text" id="review-image" required placeholder="e.g., images/reviews/customer1.jpg">
-              <small>Upload image to images/reviews/ folder first</small>
-            </div>
-
-            <div class="form-group full-width">
-              <label for="review-text">Review Text *</label>
-              <textarea id="review-text" rows="4" required placeholder="Enter customer testimonial..."></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="review-rating">Rating *</label>
-              <select id="review-rating" required>
-                <option value="">Select Rating</option>
-                <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
-                <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
-                <option value="3">⭐⭐⭐ (3 Stars)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input type="checkbox" id="review-featured">
-                <span>Show on Homepage</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary review-submit-btn">
-              <i class="fa-solid fa-plus"></i> Add Review
-            </button>
-            <button type="reset" class="btn btn-secondary">
-              <i class="fa-solid fa-rotate-left"></i> Reset
-            </button>
-          </div>
-        </form>
-
-        <!-- Reviews List -->
-        <div id="reviews-list" class="reviews-list">
-          <!-- Reviews will be loaded here -->
-        </div>
-      </section>
-
       <!-- Products List -->
       <section class="dashboard-section">
         <div class="section-header">

@@ -6,63 +6,23 @@ function getProductId() {
   return urlParams.get('id');
 }
 
-// Get products from localStorage
-function getProducts() {
-  const stored = localStorage.getItem('dreamProducts');
-  if (stored) {
-    return JSON.parse(stored);
-  }
-  // Default products
-  return [
-    {
-      id: 1,
-      title: "Arabic Calligraphy (Black & White)",
-      artist: "Rohan Shahzad",
-      artistContact: "923354581567",
-      price: "50,000.00",
-      category: "Calligraphy",
-      image: "images/products/rohan c1 (copy).jpeg",
-      description: "An elegant acrylic painting that showcases the beauty of Arabic script through bold black and white strokes. The artwork highlights the rhythm and flow of traditional calligraphy, creating a stunning visual statement that celebrates Islamic art and cultural heritage.",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Islamic Calligraphy Canvas",
-      artist: "Rohan Shahzad",
-      artistContact: "923354581567",
-      price: "45,000.00",
-      category: "Calligraphy",
-      image: "images/products/rohan c2 (copy).jpeg",
-      description: "A beautiful Islamic calligraphy piece featuring intricate Arabic script on canvas. This artwork combines traditional calligraphic techniques with contemporary styling.",
-      featured: true
-    },
-    {
-      id: 3,
-      title: "Colorful Calligraphy Art",
-      artist: "Fasih-ur-Rehman",
-      artistContact: "923158773306",
-      price: "40,000.00",
-      category: "Calligraphy",
-      image: "images/products/fasih c1.png",
-      description: "A stunning display of Arabic calligraphy expertise. This piece showcases the artistic beauty of Islamic script with precision and elegance.",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Still Life Composition",
-      artist: "Ahmad Abbas",
-      artistContact: "923279784423",
-      price: "35,000.00",
-      category: "Still Life",
-      image: "images/products/ahmad s1.png",
-      description: "A classic still life painting featuring everyday objects arranged with artistic precision. The use of light and shadow creates depth and dimension.",
-      featured: false
+// Get products from JSON file
+async function getProducts() {
+  try {
+    const response = await fetch('products.json');
+    if (!response.ok) {
+      throw new Error('Failed to load products');
     }
-  ];
+    const data = await response.json();
+    return data.products || [];
+  } catch (error) {
+    console.error('Error loading products:', error);
+    return [];
+  }
 }
 
 // Load product
-function loadProduct() {
+async function loadProduct() {
   const productId = getProductId();
   
   if (!productId) {
@@ -70,7 +30,7 @@ function loadProduct() {
     return;
   }
   
-  const products = getProducts();
+  const products = await getProducts();
   const product = products.find(p => p.id == productId);
   
   if (!product) {
@@ -79,7 +39,7 @@ function loadProduct() {
   }
   
   displayProduct(product);
-  loadRelatedProducts(product.category, product.id);
+  await loadRelatedProducts(product.category, product.id);
 }
 
 // Display product
@@ -131,8 +91,8 @@ function showNotFound() {
 }
 
 // Load related products
-function loadRelatedProducts(category, currentId) {
-  const products = getProducts();
+async function loadRelatedProducts(category, currentId) {
+  const products = await getProducts();
   const related = products.filter(p => p.category === category && p.id != currentId).slice(0, 3);
   
   if (related.length === 0) {
