@@ -7,6 +7,10 @@
     "api/get-products.js": {
       "memory": 1024,
       "maxDuration": 10
+    },
+    "api/upload-image.js": {
+      "memory": 1024,
+      "maxDuration": 30
     }
   },
   "rewrites": [

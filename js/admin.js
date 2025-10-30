@@ -280,6 +280,77 @@ function viewProduct(id) {
 }
 
 
+// Image Upload Functionality
+document.getElementById('upload-image-btn').addEventListener('click', function() {
+  document.getElementById('product-image-file').click();
+});
+
+document.getElementById('product-image-file').addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  // Validate file type
+  const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    alert('⚠️ Please select a valid image file (JPG, PNG, GIF, or WEBP)');
+    return;
+  }
+  
+  // Validate file size (max 5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    alert('⚠️ Image size must be less than 5MB');
+    return;
+  }
+  
+  const uploadStatus = document.getElementById('upload-status');
+  uploadStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+  uploadStatus.style.color = '#1e90ff';
+  
+  try {
+    // Create form data
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    // Upload to API
+    const response = await fetch('/api/upload-image', {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (!response.ok) {
+      throw new Error('Upload failed');
+    }
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'Upload failed');
+    }
+    
+    // Set image URL in input field
+    document.getElementById('product-image').value = result.url;
+    
+    // Show preview
+    const preview = document.getElementById('image-preview');
+    const previewContainer = document.getElementById('image-preview-container');
+    preview.src = result.url;
+    previewContainer.style.display = 'block';
+    
+    uploadStatus.innerHTML = '<i class="fa-solid fa-check-circle"></i> Uploaded!';
+    uploadStatus.style.color = '#28a745';
+    
+    setTimeout(() => {
+      uploadStatus.innerHTML = '';
+    }, 3000);
+    
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    uploadStatus.innerHTML = '<i class="fa-solid fa-exclamation-circle"></i> Upload failed';
+    uploadStatus.style.color = '#dc3545';
+    alert('⚠️ Error uploading image: ' + error.message);
+  }
+});
+
 // Initialize
 checkAuth();
 

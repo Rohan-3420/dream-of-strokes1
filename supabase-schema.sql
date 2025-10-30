@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE INDEX IF NOT EXISTS idx_products_featured ON products(featured);
 
 -- Create index on sold products for faster queries
-CREATE INDEX IF NOT EXISTS idx_products_sold ON products(sold);
+CREATE INDEX IF NOT EXISTS idx_products_sold ON products(sold);ok 
 
 -- Create index on category for filtering
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
@@ -43,6 +43,14 @@ CREATE POLICY "Allow all operations" ON products
   FOR ALL
   USING (true)
   WITH CHECK (true);
+
+-- Create storage bucket for product images
+-- Note: This needs to be done via Supabase Dashboard
+-- Go to Storage → Create bucket → Name: "product-images" → Public: YES
+
+-- Storage bucket policies (run after creating bucket)
+-- Allow public read access to images
+-- Allow authenticated upload (you can adjust this)
 
 -- Insert sample data from products.json
 INSERT INTO products (id, title, artist, artist_contact, price, category, image, description, featured, sold)
