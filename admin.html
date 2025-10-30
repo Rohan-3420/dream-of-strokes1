@@ -87,18 +87,18 @@
             </div>
 
             <div class="form-group full-width">
-              <label for="product-image">Product Image *</label>
+              <label for="product-image">Product Image(s) *</label>
               <div class="image-upload-container">
-                <input type="file" id="product-image-file" accept="image/*" style="display: none;">
+                <input type="file" id="product-image-file" accept="image/*" multiple style="display: none;">
                 <button type="button" class="btn btn-secondary" id="upload-image-btn">
-                  <i class="fa-solid fa-upload"></i> Upload Image
+                  <i class="fa-solid fa-upload"></i> Upload Image(s)
                 </button>
                 <span id="upload-status"></span>
               </div>
-              <input type="text" id="product-image" required placeholder="Image URL will appear here after upload" readonly>
-              <small>Click "Upload Image" to select and upload a product image (JPG, PNG, GIF, WEBP)</small>
+              <input type="text" id="product-image" required placeholder="Image URLs will appear here after upload" readonly>
+              <small>Click "Upload Image(s)" to select and upload one or multiple product images (JPG, PNG, GIF, WEBP)</small>
               <div id="image-preview-container" style="display: none; margin-top: 10px;">
-                <img id="image-preview" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #ddd;">
+                <div id="image-preview-grid" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
               </div>
             </div>
 

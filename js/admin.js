@@ -286,68 +286,106 @@ document.getElementById('upload-image-btn').addEventListener('click', function()
 });
 
 document.getElementById('product-image-file').addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
   
-  // Validate file type
   const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-  if (!validTypes.includes(file.type)) {
-    alert('⚠️ Please select a valid image file (JPG, PNG, GIF, or WEBP)');
-    return;
-  }
-  
-  // Validate file size (max 5MB)
-  if (file.size > 5 * 1024 * 1024) {
-    alert('⚠️ Image size must be less than 5MB');
-    return;
-  }
-  
   const uploadStatus = document.getElementById('upload-status');
-  uploadStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+  const previewContainer = document.getElementById('image-preview-container');
+  const previewGrid = document.getElementById('image-preview-grid');
+  
+  // Validate all files first
+  for (const file of files) {
+    if (!validTypes.includes(file.type)) {
+      alert(`⚠️ "${file.name}" is not a valid image file (JPG, PNG, GIF, or WEBP)`);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert(`⚠️ "${file.name}" is too large (max 5MB)`);
+      return;
+    }
+  }
+  
+  uploadStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Uploading ${files.length} file(s)...`;
   uploadStatus.style.color = '#1e90ff';
   
-  try {
-    // Create form data
-    const formData = new FormData();
-    formData.append('image', file);
+  const uploadedUrls = [];
+  let successCount = 0;
+  let failCount = 0;
+  
+  // Upload each file
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
     
-    // Upload to API
-    const response = await fetch('/api/upload-image', {
-      method: 'POST',
-      body: formData
+    try {
+      uploadStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Uploading ${i + 1}/${files.length}: ${file.name}`;
+      
+      // Create form data
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      // Upload to API
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+      
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.message || 'Upload failed');
+      }
+      
+      uploadedUrls.push(result.url);
+      successCount++;
+      
+    } catch (error) {
+      console.error(`Error uploading ${file.name}:`, error);
+      failCount++;
+      alert(`⚠️ Failed to upload "${file.name}": ${error.message}`);
+    }
+  }
+  
+  // Update UI with results
+  if (uploadedUrls.length > 0) {
+    // Set image URLs in input field (comma-separated for multiple)
+    document.getElementById('product-image').value = uploadedUrls.join(', ');
+    
+    // Show previews
+    previewGrid.innerHTML = '';
+    uploadedUrls.forEach(url => {
+      const imgWrapper = document.createElement('div');
+      imgWrapper.style.cssText = 'position: relative;';
+      
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Preview';
+      img.style.cssText = 'width: 150px; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;';
+      
+      imgWrapper.appendChild(img);
+      previewGrid.appendChild(imgWrapper);
     });
-    
-    if (!response.ok) {
-      throw new Error('Upload failed');
-    }
-    
-    const result = await response.json();
-    
-    if (!result.success) {
-      throw new Error(result.message || 'Upload failed');
-    }
-    
-    // Set image URL in input field
-    document.getElementById('product-image').value = result.url;
-    
-    // Show preview
-    const preview = document.getElementById('image-preview');
-    const previewContainer = document.getElementById('image-preview-container');
-    preview.src = result.url;
     previewContainer.style.display = 'block';
     
-    uploadStatus.innerHTML = '<i class="fa-solid fa-check-circle"></i> Uploaded!';
-    uploadStatus.style.color = '#28a745';
+    // Show success message
+    if (failCount === 0) {
+      uploadStatus.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${successCount} file(s) uploaded!`;
+      uploadStatus.style.color = '#28a745';
+    } else {
+      uploadStatus.innerHTML = `<i class="fa-solid fa-exclamation-triangle"></i> ${successCount} uploaded, ${failCount} failed`;
+      uploadStatus.style.color = '#ffc107';
+    }
     
     setTimeout(() => {
       uploadStatus.innerHTML = '';
-    }, 3000);
-    
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    uploadStatus.innerHTML = '<i class="fa-solid fa-exclamation-circle"></i> Upload failed';
+    }, 5000);
+  } else {
+    uploadStatus.innerHTML = '<i class="fa-solid fa-exclamation-circle"></i> All uploads failed';
     uploadStatus.style.color = '#dc3545';
-    alert('⚠️ Error uploading image: ' + error.message);
   }
 });
 
