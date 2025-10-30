@@ -1,5 +1,7 @@
 // Vercel Serverless Function to upload images to Supabase Storage
 import { createClient } from '@supabase/supabase-js';
+import multiparty from 'multiparty';
+import fs from 'fs';
 
 // CRITICAL: Disable Vercel's automatic body parsing for file uploads
 export const config = {
@@ -42,93 +44,91 @@ export default async function handler(req, res) {
   );
   
   try {
-    // Read raw body
-    const chunks = [];
-    for await (const chunk of req) {
-      chunks.push(chunk);
-    }
-    const buffer = Buffer.concat(chunks);
+    // Parse multipart form data using multiparty
+    const form = new multiparty.Form();
     
-    console.log('Received buffer size:', buffer.length);
+    const parseForm = () => {
+      return new Promise((resolve, reject) => {
+        form.parse(req, (err, fields, files) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve({ fields, files });
+        });
+      });
+    };
     
-    // Parse multipart manually
-    const contentType = req.headers['content-type'] || '';
-    const boundaryMatch = contentType.match(/boundary=(.+)$/);
+    const { fields, files } = await parseForm();
     
-    if (!boundaryMatch) {
-      console.error('No boundary found in content-type:', contentType);
+    console.log('Parsed files:', files);
+    
+    // Check if image file was uploaded
+    if (!files.image || !files.image[0]) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid content type - no boundary found'
+        message: 'No image file provided'
       });
     }
     
-    const boundary = '--' + boundaryMatch[1];
-    console.log('Using boundary:', boundary);
+    const uploadedFile = files.image[0];
+    console.log('File details:', {
+      originalFilename: uploadedFile.originalFilename,
+      size: uploadedFile.size,
+      path: uploadedFile.path
+    });
     
-    const parts = buffer.toString('binary').split(boundary);
-    console.log('Found parts:', parts.length);
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const fileType = uploadedFile.headers['content-type'];
     
-    let fileBuffer = null;
-    let fileName = 'image.jpg';
-    let mimeType = 'image/jpeg';
-    
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      if (part.includes('Content-Disposition') && part.includes('filename=')) {
-        console.log('Found file part at index:', i);
-        
-        // Extract filename
-        const filenameMatch = part.match(/filename="([^"]+)"/);
-        if (filenameMatch) {
-          fileName = filenameMatch[1];
-          console.log('Filename:', fileName);
-        }
-        
-        // Extract mime type
-        const mimeMatch = part.match(/Content-Type: ([^\r\n]+)/);
-        if (mimeMatch) {
-          mimeType = mimeMatch[1].trim();
-          console.log('MIME type:', mimeType);
-        }
-        
-        // Extract file data
-        const dataStart = part.indexOf('\r\n\r\n');
-        if (dataStart !== -1) {
-          const dataEnd = part.lastIndexOf('\r\n');
-          const fileData = part.substring(dataStart + 4, dataEnd);
-          fileBuffer = Buffer.from(fileData, 'binary');
-          console.log('File buffer size:', fileBuffer.length);
-        }
-      }
-    }
-    
-    if (!fileBuffer || fileBuffer.length === 0) {
-      console.error('No file buffer found or buffer is empty');
+    if (!validTypes.includes(fileType)) {
+      // Clean up temp file
+      fs.unlinkSync(uploadedFile.path);
       return res.status(400).json({
         success: false,
-        message: 'No image file provided or file is empty'
+        message: 'Invalid file type. Only JPG, PNG, GIF, and WEBP are allowed.'
       });
     }
+    
+    // Validate file size (max 5MB)
+    if (uploadedFile.size > 5 * 1024 * 1024) {
+      // Clean up temp file
+      fs.unlinkSync(uploadedFile.path);
+      return res.status(400).json({
+        success: false,
+        message: 'File size must be less than 5MB'
+      });
+    }
+    
+    // Read file buffer
+    const fileBuffer = fs.readFileSync(uploadedFile.path);
     
     // Generate unique filename
     const timestamp = Date.now();
-    const ext = fileName.split('.').pop() || 'jpg';
+    const ext = uploadedFile.originalFilename.split('.').pop() || 'jpg';
     const uniqueFileName = `product-${timestamp}.${ext}`;
+    
+    console.log('Uploading to Supabase:', uniqueFileName);
     
     // Upload to Supabase Storage
     const { data, error } = await supabase.storage
       .from('product-images')
       .upload(uniqueFileName, fileBuffer, {
-        contentType: mimeType || 'image/jpeg',
+        contentType: fileType,
         cacheControl: '3600',
         upsert: false
       });
+    
+    // Clean up temp file
+    fs.unlinkSync(uploadedFile.path);
     
     if (error) {
       console.error('Supabase upload error:', error);
       throw new Error(error.message || 'Failed to upload to Supabase Storage');
     }
+    
+    console.log('Upload successful:', data);
     
     // Get public URL
     const { data: urlData } = supabase.storage
@@ -150,4 +150,3 @@ export default async function handler(req, res) {
     });
   }
 }
-
