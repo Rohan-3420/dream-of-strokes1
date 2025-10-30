@@ -153,9 +153,9 @@ async function loadFeaturedProducts() {
     <div class="art-card">
       <a href="product.html?id=${product.id}">
         <img src="${product.image}" alt="${product.title}" loading="lazy">
+        <h3>${product.title}</h3>
+        <p><strong>Rs. ${product.price}</strong><br>PKR</p>
       </a>
-      <h3>${product.title}</h3>
-      <p><strong>Rs. ${product.price}</strong><br>PKR</p>
     </div>
   `).join('');
 }
