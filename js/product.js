@@ -6,10 +6,10 @@ function getProductId() {
   return urlParams.get('id');
 }
 
-// Get products from JSON file
+// Get products from Supabase API
 async function getProducts() {
   try {
-    const response = await fetch('products.json');
+    const response = await fetch('/api/get-products');
     if (!response.ok) {
       throw new Error('Failed to load products');
     }

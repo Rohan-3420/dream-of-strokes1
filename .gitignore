@@ -1,0 +1,10 @@
+node_modules/
+.vercel
+.env
+.env.local
+.DS_Store
+
+# Don't commit environment variables
+.env*
+!.env.example
+

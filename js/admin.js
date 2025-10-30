@@ -48,10 +48,10 @@ async function loadProducts() {
   displayProducts(products);
 }
 
-// Get products from JSON file
+// Get products from Supabase API
 async function getProducts() {
   try {
-    const response = await fetch('products.json');
+    const response = await fetch('/api/get-products');
     if (!response.ok) {
       throw new Error('Failed to load products');
     }
@@ -63,11 +63,11 @@ async function getProducts() {
   }
 }
 
-// Save products to JSON file via backend
+// Save all products to Supabase (bulk update)
 async function saveProducts(products) {
   try {
-    const response = await fetch('save-products.php', {
-      method: 'POST',
+    const response = await fetch('/api/save-products', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -88,6 +88,34 @@ async function saveProducts(products) {
     console.error('Error saving products:', error);
     alert('⚠️ Error saving products: ' + error.message);
     return false;
+  }
+}
+
+// Save single product to Supabase
+async function saveProduct(product) {
+  try {
+    const response = await fetch('/api/save-products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product)
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to save product');
+    }
+    
+    const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.message || 'Failed to save product');
+    }
+    
+    return result.data;
+  } catch (error) {
+    console.error('Error saving product:', error);
+    alert('⚠️ Error saving product: ' + error.message);
+    return null;
   }
 }
 
@@ -143,6 +171,7 @@ document.getElementById('product-form').addEventListener('submit', async functio
   e.preventDefault();
   
   const productData = {
+    id: editingProductId || Date.now(),
     title: document.getElementById('product-title').value,
     artist: document.getElementById('product-artist').value,
     artistContact: document.getElementById('product-contact').value,
@@ -154,29 +183,20 @@ document.getElementById('product-form').addEventListener('submit', async functio
     sold: document.getElementById('product-sold').checked
   };
   
-  let products = await getProducts();
   let isEditing = editingProductId !== null;
   
-  if (editingProductId) {
-    // Update existing product
-    const index = products.findIndex(p => p.id === editingProductId);
-    if (index !== -1) {
-      products[index] = { ...products[index], ...productData };
-    }
-    editingProductId = null;
-    document.querySelector('.btn-primary').innerHTML = '<i class="fa-solid fa-plus"></i> Add Product';
-  } else {
-    // Add new product
-    const newProduct = {
-      id: Date.now(),
-      ...productData
-    };
-    products.push(newProduct);
-  }
+  // Save single product to Supabase
+  const saved = await saveProduct(productData);
   
-  const saved = await saveProducts(products);
   if (saved) {
     alert(isEditing ? 'Product updated successfully! ✅' : 'Product added successfully! ✅');
+    
+    // Reset editing state
+    editingProductId = null;
+    document.querySelector('.btn-primary').innerHTML = '<i class="fa-solid fa-plus"></i> Add Product';
+    
+    // Reload products from database
+    const products = await getProducts();
     
     // Update category suggestions
     updateCategorySuggestions(products);
@@ -225,12 +245,31 @@ async function editProduct(id) {
 // Delete product
 async function deleteProduct(id) {
   if (confirm('Are you sure you want to delete this product?')) {
-    let products = await getProducts();
-    products = products.filter(p => p.id !== id);
-    const saved = await saveProducts(products);
-    if (saved) {
+    try {
+      const response = await fetch('/api/save-products', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: id })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete product');
+      }
+      
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to delete product');
+      }
+      
+      // Reload products from database
+      const products = await getProducts();
       displayProducts(products);
       alert('Product deleted successfully! ✅');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('⚠️ Error deleting product: ' + error.message);
     }
   }
 }

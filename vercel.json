@@ -1,0 +1,23 @@
+{
+  "functions": {
+    "api/save-products.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    },
+    "api/get-products.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/save-products.php",
+      "destination": "/api/save-products"
+    }
+  ],
+  "env": {
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_ANON_KEY": "@supabase_anon_key"
+  }
+}
+
