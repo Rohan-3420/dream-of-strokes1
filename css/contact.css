@@ -28,7 +28,7 @@ body {
 /* === Contact Hero Section === */
 .contact-hero {
   background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(0, 0, 0, 0.95) 100%),
-              url('../images/background/banner.jpg') center/cover no-repeat;
+              url('../images/background/contact.jpg') center/cover no-repeat;
   padding: 120px clamp(24px, 6vw, 80px) 80px;
   text-align: center;
   position: relative;
