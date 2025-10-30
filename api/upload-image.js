@@ -42,36 +42,47 @@ export default async function handler(req, res) {
     }
     const buffer = Buffer.concat(chunks);
     
+    console.log('Received buffer size:', buffer.length);
+    
     // Parse multipart manually
     const contentType = req.headers['content-type'] || '';
     const boundaryMatch = contentType.match(/boundary=(.+)$/);
     
     if (!boundaryMatch) {
+      console.error('No boundary found in content-type:', contentType);
       return res.status(400).json({
         success: false,
-        message: 'Invalid content type'
+        message: 'Invalid content type - no boundary found'
       });
     }
     
     const boundary = '--' + boundaryMatch[1];
+    console.log('Using boundary:', boundary);
+    
     const parts = buffer.toString('binary').split(boundary);
+    console.log('Found parts:', parts.length);
     
     let fileBuffer = null;
     let fileName = 'image.jpg';
     let mimeType = 'image/jpeg';
     
-    for (const part of parts) {
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
       if (part.includes('Content-Disposition') && part.includes('filename=')) {
+        console.log('Found file part at index:', i);
+        
         // Extract filename
         const filenameMatch = part.match(/filename="([^"]+)"/);
         if (filenameMatch) {
           fileName = filenameMatch[1];
+          console.log('Filename:', fileName);
         }
         
         // Extract mime type
         const mimeMatch = part.match(/Content-Type: ([^\r\n]+)/);
         if (mimeMatch) {
-          mimeType = mimeMatch[1];
+          mimeType = mimeMatch[1].trim();
+          console.log('MIME type:', mimeType);
         }
         
         // Extract file data
@@ -80,14 +91,16 @@ export default async function handler(req, res) {
           const dataEnd = part.lastIndexOf('\r\n');
           const fileData = part.substring(dataStart + 4, dataEnd);
           fileBuffer = Buffer.from(fileData, 'binary');
+          console.log('File buffer size:', fileBuffer.length);
         }
       }
     }
     
-    if (!fileBuffer) {
+    if (!fileBuffer || fileBuffer.length === 0) {
+      console.error('No file buffer found or buffer is empty');
       return res.status(400).json({
         success: false,
-        message: 'No image file provided'
+        message: 'No image file provided or file is empty'
       });
     }
     
